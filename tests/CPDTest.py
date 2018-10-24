@@ -1,7 +1,4 @@
-from drone_classification.math.CPD import changepoint_detection
-from drone_classification.get_data_path import get_data_path
-from drone_classification.matio import matio
-import matplotlib.pyplot as plt
+from tests.baseTest import *
 
 """
 The purpose of this test is to find changepoints in waveforms captured by 
