@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 import ruptures as rpt
 from time import time
+from fastdtw import fastdtw
+from scipy.spatial.distance import euclidean
 from drone_classification.get_data_path import get_data_path
 from drone_classification.matio import matio
 
@@ -15,6 +17,15 @@ def changepoint_detection(signal, bkps = 1, window_width = 100, display = False)
         rpt.display(signal, breakpoints)
         plt.show()
     return breakpoints
+
+
+class DTW(fastdtw):
+    """
+
+    """
+
+    def __init__(self, signalA, signalB, dist_measure=euclidean):
+        pass
 
 
 """
