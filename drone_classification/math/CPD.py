@@ -17,10 +17,6 @@ def changepoint_detection(signal, bkps = 1, window_width = 100, display = False)
     return breakpoints
 
 
-
-
-
-
 """
 The purpose of this test is to find changepoints in waveforms captured by 
 oscilloscope.  This file will load the .mat files provided in the data
