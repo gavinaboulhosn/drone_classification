@@ -1,8 +1,13 @@
-import os
-from definitions import ROOT_DIR
+from definitions import *
 
 
-def get_data_path(n=1, ext=".mat"):
-    assert(n>0 and n<=6)
-    return os.path.join(ROOT_DIR, 'data', 'UAV0000{}'.format(str(n)+ext))
+def get_data_path(filename=None, n=4):
+    if not filename:
+        return os.path.join(DATA_PATH, DATA_FILES[n-1])
+
+    if filename not in DATA_FILES:
+        print("File not found in data directory.")
+        raise IOError
+    else:
+        return os.path.join(DATA_PATH, filename)
 

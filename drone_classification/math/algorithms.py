@@ -1,10 +1,9 @@
 import matplotlib.pyplot as plt
 import ruptures as rpt
 import pywt
-from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
-from drone_classification.get_data_path import get_data_path
-from drone_classification.matio import matio
+from drone_classification.matio import Matio
+from drone_classification.Signal import Signal
 
 
 
@@ -15,22 +14,31 @@ class DTW:
 
     """
 
-    def __init__(self, signalA, signalB, dist_measure=euclidean):
+    def __init__(self, test_signal: Signal, templates: [Signal], dist_measure=euclidean):
+        self.__test_signal = test_signal
+        self.__templates = templates
+        self.__dist_measure = dist_measure
+
+
+    def dtw(self):
         pass
 
-    def dtw(self, signal):
-        pass
 
 
+def wavelet_decomposition(signal: Signal):
+    sample_frequency = signal.get_sampling_frequency()
+    carrier_frequency = signal.get_frequency()
+    levels = 0
+    while sample_frequency > carrier_frequency:
+        levels += 1
 
-def wavelet_decomposition(signal, levels):
-    pass
 
-def changepoint_detection(signal, bkps = 1, window_width = 100, display = False):
-    algo = rpt.Window(width=window_width, model="rbf").fit(signal)
+def changepoint_detection(signal: Signal, bkps = 1, window_width = 100, display = False):
+    signal_data = signal.get_signal()[::5]
+    algo = rpt.Window(width=window_width, model="rbf").fit(signal_data)
     breakpoints = algo.predict(n_bkps=bkps)
     if display:
-        rpt.display(signal, breakpoints)
+        rpt.display(signal_data, breakpoints)
         plt.show()
     return breakpoints
 
@@ -49,11 +57,9 @@ minimize the amount of data we will be processing using Dynamic Time Warping.
 
 
 if __name__ == '__main__':
-
-    path = get_data_path(4)
-    mat = matio(path)
-    data = mat.extract_data()
-    bkps = changepoint_detection(data[::5], display=True)
+    mat = Matio()
+    data = Signal(mat)
+    bkps = changepoint_detection(data, display=True)
     new_signal = data[bkps[0]*5:]
     plt.plot(new_signal)
     plt.show()

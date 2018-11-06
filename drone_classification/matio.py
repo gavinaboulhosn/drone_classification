@@ -1,15 +1,16 @@
 import h5py
 import numpy as np
+from drone_classification.get_data_path import get_data_path
 
 
-class matio:
+class Matio:
     """
     This class deals with handling I/O of .mat files and contains helper functions
     to easily obtain the different structures contained in the files.
 
     """
-    def __init__(self, p):
-        self.path = p
+    def __init__(self,file=None):
+        self.path = get_data_path(filename=file)
         self.file = h5py.File(self.path)
 
 
@@ -34,3 +35,7 @@ class matio:
         :return: list of channel 1 keys
         """
         return list(self.file['Channel_1'].keys())
+
+    def get_sample_freq(self):
+        return (1/self.file['Channel_1']['XInc'][0][0])
+
