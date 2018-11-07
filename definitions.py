@@ -8,4 +8,4 @@ DATA_FILES = sorted([file for file in os.listdir(DATA_PATH) if ".mat" in file]) 
 
 TEMPLATE_PATH = os.path.join(DATA_PATH, "templates")
 
-TEMPLATE_FILES = [file.lower() for file in os.listdir(TEMPLATE_PATH) if ".mat" in file]
+TEMPLATE_FILES = [file for file in os.listdir(TEMPLATE_PATH) if ".mat" in file]
