@@ -1,6 +1,6 @@
 import h5py
 import numpy as np
-from drone_classification.get_data_path import get_data_path
+from drone_classification.get_data_path import get_data_path, get_template_path
 
 
 class Matio:
@@ -9,8 +9,11 @@ class Matio:
     to easily obtain the different structures contained in the files.
 
     """
-    def __init__(self,file=None):
-        self.path = get_data_path(filename=file)
+    def __init__(self,file=None, template = False):
+        if template:
+            self.path = get_template_path(file)
+        else:
+            self.path = get_data_path(filename=file)
         self.file = h5py.File(self.path)
 
 

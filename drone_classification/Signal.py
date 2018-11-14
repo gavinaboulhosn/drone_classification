@@ -2,7 +2,6 @@ import ruptures as rpt
 import matplotlib.pyplot as plt
 from drone_classification.matio import Matio
 import pywt
-import numpy as np
 
 class Signal(object):
     """
@@ -35,9 +34,7 @@ class Signal(object):
         if display:
             rpt.display(self.__signal, [x*factor for x in bkps])
             plt.show()
-        noise = np.max(self.__signal[:bkps[0] * factor]) - np.min(self.__signal[:bkps[0] * factor])
-        signal = np.max(self.__signal[bkps[0] * factor:]) - np.min(self.__signal[bkps[0] * factor:])
-        self._SNR = signal / noise
+
         self.__signal = self.__signal[bkps[0]*factor:]
         for i in range(len(bkps)):
             bkps[i] *= factor
