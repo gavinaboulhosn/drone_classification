@@ -9,9 +9,9 @@ class Matio:
     to easily obtain the different structures contained in the files.
 
     """
-    def __init__(self,file=None, template = False):
+    def __init__(self,file=None, template=False):
         if template:
-            self.path = get_template_path(file)
+            self.path = get_template_path(filename=file)
         else:
             self.path = get_data_path(filename=file)
         self.file = h5py.File(self.path)
@@ -41,4 +41,3 @@ class Matio:
 
     def get_sample_freq(self):
         return (1/self.file['Channel_1']['XInc'][0][0])
-

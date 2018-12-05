@@ -3,7 +3,7 @@ import time
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
 from drone_classification.matio import Matio
-from drone_classification.Signal import Signal
+from drone_classification.Signal import Signal, Process
 from definitions import TEMPLATE_FILES
 
 
@@ -22,11 +22,16 @@ class DTW:
 
     def dtw(self):
         for test in self.__templates:
-            template = Signal(Matio(test, template=True))
+            mat = Matio(test, template=True)
+            template = Signal(mat)
+            print("before wd")
+            template.wavelet_decomposition()
+            print("before cpd")
+            print(len(template.get_signal()))
+            template.change_point_detection()
             print("here")
-            template_signal = template.get_signal()
-            print("got signal")
-            print(fastdtw(self.signal, template_signal, dist=self.dist_measure))
+
+            print(fastdtw(self.signal, template.get_signal(), dist=self.dist_measure))
 
 
 
@@ -40,9 +45,5 @@ minimize the amount of data we will be processing using Dynamic Time Warping.
 
 
 if __name__ == '__main__':
-    mat = Matio("UAV00005.mat")
-    signal = Signal(mat)
-    signal.wavelet_decomposition()
-    signal.change_point_detection()
-    dtw = DTW(signal)
-    dtw.dtw()
+    pass
+
