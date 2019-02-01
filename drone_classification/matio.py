@@ -14,7 +14,7 @@ class Matio:
             self.path = get_template_path(filename=file)
         else:
             self.path = get_data_path(filename=file)
-        self.file = h5py.File(self.path)
+            self.file = h5py.File(self.path)
 
 
     def extract_data(self):

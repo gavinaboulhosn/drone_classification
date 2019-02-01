@@ -47,6 +47,9 @@ class Signal(object):
     def downsample(self, factor=5):
         self.__signal = self.__signal[::factor]
 
+    def set_new_signal(self, start_index, end_index):
+        self.__signal = self.__signal[start_index:end_index]
+
     def wavelet_decomposition(self, wavelet='haar'):
         max_level = pywt.dwt_max_level(len(self.__signal), pywt.Wavelet(wavelet).dec_len)
         coeffs = pywt.wavedec(self.__signal, 'haar', level=max_level)
