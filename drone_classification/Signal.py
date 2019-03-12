@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import math
 from drone_classification.matio import Matio
 import pywt
-from fastdtw import fastdtw
+
 
 class Signal(object):
     """
@@ -15,8 +15,8 @@ class Signal(object):
         :param signal:
         """
         self.__signal = signal.extract_data()
-        self.__sampling_frequency = signal.get_sample_freq()
         self.__carrier_frequency = freq
+        self.signal_file = signal
 
 
     def get_signal(self):
@@ -28,7 +28,7 @@ class Signal(object):
     def get_frequency(self):
         return self.__carrier_frequency
 
-    def change_point_detection(self, breakpoints = 1, window_width = 50, display=False, factor=5):
+    def change_point_detection(self, breakpoints = 1, window_width = 100, display=False, factor=10):
         signal_data = self.__signal[::factor]
         algo = rpt.Window(width=window_width, model="rbf").fit(signal_data)
         bkps = algo.predict(n_bkps=breakpoints)
@@ -43,31 +43,37 @@ class Signal(object):
 
     def set_zeroes(self, index0=0, index1 = -1):
         self.__signal[index0:index1] = 0
-
-    def downsample(self, factor=5):
-        self.__signal = self.__signal[::factor]
+    #
+    # def downsample(self, factor=5):
+    #     self.__signal = self.__signal[::factor]
 
     def set_new_signal(self, start_index, end_index):
         self.__signal = self.__signal[start_index:end_index]
+
+    def export_to_mat(self, filename):
+        self.signal_file.export(self.get_signal(), filename)
+
+    def get_sample_freq(self):
+        return 1/self.signal_file['Channel_1']['XInc'][0][0]
 
     def wavelet_decomposition(self, wavelet='haar'):
         max_level = pywt.dwt_max_level(len(self.__signal), pywt.Wavelet(wavelet).dec_len)
         coeffs = pywt.wavedec(self.__signal, 'haar', level=max_level)
         self.__signal = coeffs[-1]
 
-    def quadrature_mirror_filter(self):
-        self.__signal = pywt.qmf(self.__signal)
-        return pywt.qmf(self.__signal)
+    # # def quadrature_mirror_filter(self):
+    #     self.__signal = pywt.qmf(self.__signal)
+    #     return pywt.qmf(self.__signal)
 
 
-class Process(Signal):
-    def __init__(self, signal):
-        super(Process, self).__init__(signal)
-        self.wavelet_decomposition()
-        factor = math.floor(len(self.get_signal())/50000)
-        self.downsample(factor)
-        bkps = self.change_point_detection(3)
-        self.set_zeroes(0, bkps[0])
-        finalfactor = math.floor(len(self.get_signal())/5000)
-        self.downsample(finalfactor)
-
+# class Process(Signal):
+#     def __init__(self, signal):
+#         super(Process, self).__init__(signal)
+#         self.wavelet_decomposition()
+#         factor = math.floor(len(self.get_signal())/50000)
+#         self.downsample(factor)
+#         bkps = self.change_point_detection(3)
+#         self.set_zeroes(0, bkps[0])
+#         finalfactor = math.floor(len(self.get_signal())/5000)
+#         self.downsample(finalfactor)
+#

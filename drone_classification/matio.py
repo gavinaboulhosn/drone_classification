@@ -39,5 +39,6 @@ class Matio:
         """
         return list(self.file['Channel_1'].keys())
 
-    def get_sample_freq(self):
-        return (1/self.file['Channel_1']['XInc'][0][0])
+    def export(self, filename):
+        pass
+
