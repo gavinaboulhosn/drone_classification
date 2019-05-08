@@ -32,10 +32,10 @@ class Signal(object):
             rpt.display(self.__signal, [x*factor for x in bkps])
             plt.show()
 
-        #self.__signal = self.__signal[bkps[0]*factor:]
         for i in range(len(bkps)):
             bkps[i] *= factor
         return bkps
+
     def cpd_signal(self, signal, window_width = 2500, display=False, factor=780):
         tmpsignal = signal[::factor]
         algo = rpt.Window(width=window_width, model="rbf").fit(tmpsignal)
@@ -44,16 +44,13 @@ class Signal(object):
             rpt.display(signal, [x*factor for x in bkps])
             plt.show()
 
-        #self.__signal = self.__signal[bkps[0]*factor:]
         for i in range(len(bkps)):
             bkps[i] *= factor
         return bkps
 
     def set_zeroes(self, index0=0, index1 = -1):
         self.__signal[index0:index1] = 0
-    #
-    # def downsample(self, factor=5):
-    #     self.__signal = self.__signal[::factor]
+
 
     def set_new_signal(self, start_index, end_index):
         self.__signal = self.__signal[start_index:end_index]
@@ -71,19 +68,7 @@ class Signal(object):
 
 
 
-    # # def quadrature_mirror_filter(self):
-    #     self.__signal = pywt.qmf(self.__signal)
-    #     return pywt.qmf(self.__signal)
+    def quadrature_mirror_filter(self):
+        self.__signal = pywt.qmf(self.__signal)
+        return pywt.qmf(self.__signal)
 
-
-# class Process(Signal):
-#     def __init__(self, signal):
-#         super(Process, self).__init__(signal)
-#         self.wavelet_decomposition()
-#         factor = math.floor(len(self.get_signal())/50000)
-#         self.downsample(factor)
-#         bkps = self.change_point_detection(3)
-#         self.set_zeroes(0, bkps[0])
-#         finalfactor = math.floor(len(self.get_signal())/5000)
-#         self.downsample(finalfactor)
-#
